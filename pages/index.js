@@ -1,20 +1,68 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
+import encodeToChar from "../data/encodeToChar.json";
+
+/**
+ *  @param c {string} - char
+ *  @returns {bool}
+ */
+function isAlphabet(c) {
+	return (c >= 65 && c <= 90) || (c >= 97 && c <= 122);
+}
+
+/**
+ *  @param encode {string}
+ *  @returns {string[]}
+ */
+function getCandidate(encode) {
+	encode = encode?.toLowerCase();
+	return encodeToChar[encode];
+}
 
 export default function Home() {
 	const [keys, setKeys] = useState("");
+	const [candidate, setCandidate] = useState([]);
+	const [text, setText] = useState("");
+
 	useEffect(() => {
 		const keydownHandler = (e) => {
-			console.log(e.keyCode);
-			if (e.keyCode == 13) setKeys("");
-			else setKeys((keys) => (keys += e.key));
+			console.log(e);
+			switch (e.key) {
+				case "Enter":
+					setKeys("");
+					break;
+				case "Backspace":
+					setKeys((keys) => keys?.slice(0, -1));
+					break;
+				case "Delete":
+					setKeys("");
+				default:
+					if (isAlphabet(e.keyCode))
+						setKeys((keys) => (keys + e.key).toUpperCase());
+					break;
+			}
 		};
 		document.addEventListener("keydown", keydownHandler);
 		return () => {
 			document.removeEventListener("keydown", keydownHandler);
 		};
 	}, []);
+
+	useEffect(() => {
+		setCandidate(getCandidate(keys));
+	}, [keys]);
+
+	useEffect(() => {
+		const keydownHandler = (e) => {
+			if (e.key !== " " || e.key < '0' && e.key > '9') return;
+			e.preventDefault();
+			setText((text) => text + candidate[0]);
+		};
+		document.addEventListener("keydown", keydownHandler);
+		return () => document.removeEventListener("keydown", keydownHandler);
+	}, [candidate]);
+
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -29,6 +77,8 @@ export default function Home() {
 				<p className={styles.description}>互動式打字練習</p>
 
 				<h1 className={styles.title}>{keys}</h1>
+				<h1 className={styles.title}>{candidate}</h1>
+				<p className={styles.description}>{text}</p>
 			</main>
 
 			<footer className={styles.footer}>
