@@ -39,8 +39,7 @@ export default function Home() {
 					setKeys((keys) => keys?.slice(0, -1));
 					break;
 				default:
-					if (isAlphabet(e))
-						setKeys((keys) => (keys + e.key).toUpperCase());
+					if (isAlphabet(e)) setKeys((keys) => (keys + e.key).toUpperCase());
 					break;
 			}
 		};
@@ -55,7 +54,7 @@ export default function Home() {
 	useEffect(() => {
 		const keydownHandler = (e) => {
 			// console.log(e)
-			if(e.key !== ' ' && (e.key < '0' || e.key > '9' )) return 
+			if (e.key !== " " && (e.key < "0" || e.key > "9")) return;
 			e.preventDefault();
 
 			setText(
@@ -83,6 +82,16 @@ export default function Home() {
 				<h1 className={styles.title}>{keys}</h1>
 				<h1 className={styles.title}>{candidate}</h1>
 				<p className={styles.description}>{text}</p>
+				<div className={styles.grid}>
+					<div className={styles.card}>
+						<span>
+							<kbd className={styles.kbd}>Space</kbd>選取第一個字
+						</span>
+					</div>
+					<div className={styles.card}>
+						<span>數字鍵選取其他候選字</span>
+					</div>
+				</div>
 			</main>
 
 			<footer className={styles.footer}>

@@ -23,11 +23,13 @@ a {
 }
 
 @media (prefers-color-scheme: dark) {
+	:root {
+		--white: #1e1d1c;
+		--gray: #424141;
+		--dark-gray: #b7b7b7;
+		--black: #f1ecd1;
+	}
 	html {
 		color-scheme: dark;
-	}
-	body {
-		color: var(--white);
-		background: var(--black);
 	}
 }
