@@ -17,17 +17,17 @@ function isAlphabet(c) {
  */
 function getCandidate(encode) {
 	encode = encode?.toLowerCase();
-	return encodeToChar[encode];
+	return encodeToChar[encode] || [""];
 }
 
 export default function Home() {
 	const [keys, setKeys] = useState("");
-	const [candidate, setCandidate] = useState([]);
+	const [candidate, setCandidate] = useState(['']);
 	const [text, setText] = useState("");
 
 	useEffect(() => {
 		const keydownHandler = (e) => {
-			console.log(e);
+			// console.log(e);
 			switch (e.key) {
 				case "Enter":
 					setKeys("");
