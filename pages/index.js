@@ -16,7 +16,14 @@ function isAlphabet(e) {
  *  @returns {string[]}
  */
 function getCandidate(encode) {
-	return encodeToChar[encode?.toLowerCase()] || [""];
+	if (!encode) return [""];
+	encode = encode?.toLowerCase();
+	let candidate = Object.keys(encodeToChar)
+		.map((item) => (item.startsWith(encode) ? encodeToChar[item] : null))
+		.flat()
+		.filter((i) => i)
+		.filter((i, item) => item <= 10);
+	return candidate || [""];
 }
 
 export default function Home() {
@@ -26,7 +33,7 @@ export default function Home() {
 
 	useEffect(() => {
 		const keydownHandler = (e) => {
-			console.log(e);
+			// console.log(e);
 			switch (e.key) {
 				case "Enter":
 					setKeys("");
@@ -36,6 +43,7 @@ export default function Home() {
 					setText("");
 					break;
 				case "Backspace":
+					if (keys.length === 0) setText((text) => text?.slice(0, -1));
 					setKeys((keys) => keys?.slice(0, -1));
 					break;
 				default:
@@ -80,12 +88,23 @@ export default function Home() {
 				<p className={styles.description}>互動式打字練習</p>
 
 				<h1 className={styles.title}>{keys}</h1>
-				<h1 className={styles.title}>{candidate}</h1>
-				<p className={styles.description}>{text}</p>
+				<p className={styles.description}>{candidate}</p>
+				<h1 className={styles.title}>{text}</h1>
+
 				<div className={styles.grid}>
 					<div className={styles.card}>
 						<span>
 							<kbd className={styles.kbd}>Space</kbd>選取第一個字
+						</span>
+					</div>
+					<div className={styles.card}>
+						<span>
+							<kbd className={styles.kbd}>Delete</kbd>清空輸入的文字
+						</span>
+					</div>
+					<div className={styles.card}>
+						<span>
+							<kbd className={styles.kbd}>Backspace</kbd>刪掉最後一個字
 						</span>
 					</div>
 					<div className={styles.card}>
