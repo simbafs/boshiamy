@@ -8,7 +8,7 @@ import encodeToChar from "../data/encodeToChar.json";
  *  @returns {bool}
  */
 function isAlphabet(c) {
-	return (c >= 65 && c <= 90) || (c >= 97 && c <= 122);
+	return c >= 65 && c <= 90;
 }
 
 /**
@@ -16,13 +16,12 @@ function isAlphabet(c) {
  *  @returns {string[]}
  */
 function getCandidate(encode) {
-	encode = encode?.toLowerCase();
-	return encodeToChar[encode] || [""];
+	return encodeToChar[encode?.toLowerCase()] || [""];
 }
 
 export default function Home() {
 	const [keys, setKeys] = useState("");
-	const [candidate, setCandidate] = useState(['']);
+	const [candidate, setCandidate] = useState([""]);
 	const [text, setText] = useState("");
 
 	useEffect(() => {
@@ -30,13 +29,12 @@ export default function Home() {
 			// console.log(e);
 			switch (e.key) {
 				case "Enter":
+				case "Delete":
 					setKeys("");
 					break;
 				case "Backspace":
 					setKeys((keys) => keys?.slice(0, -1));
 					break;
-				case "Delete":
-					setKeys("");
 				default:
 					if (isAlphabet(e.keyCode))
 						setKeys((keys) => (keys + e.key).toUpperCase());
@@ -44,9 +42,7 @@ export default function Home() {
 			}
 		};
 		document.addEventListener("keydown", keydownHandler);
-		return () => {
-			document.removeEventListener("keydown", keydownHandler);
-		};
+		return () => document.removeEventListener("keydown", keydownHandler);
 	}, []);
 
 	useEffect(() => {
@@ -55,9 +51,10 @@ export default function Home() {
 
 	useEffect(() => {
 		const keydownHandler = (e) => {
-			if (e.key !== " " || e.key < '0' && e.key > '9') return;
+			if (e.key !== " " || (e.key < "0" && e.key > "9")) return;
 			e.preventDefault();
 			setText((text) => text + candidate[0]);
+			setKeys("");
 		};
 		document.addEventListener("keydown", keydownHandler);
 		return () => document.removeEventListener("keydown", keydownHandler);
