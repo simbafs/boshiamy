@@ -19,9 +19,9 @@ function getCandidate(encode) {
 	if (!encode) return [""];
 	encode = encode?.toLowerCase();
 	let candidate = Object.keys(encodeToChar)
-		.map((item) => (item.startsWith(encode) ? encodeToChar[item] : null))
+		.map(item => (item.startsWith(encode) ? encodeToChar[item] : null))
 		.flat()
-		.filter((i) => i)
+		.filter(i => i)
 		.filter((i, item) => item <= 10);
 	return candidate || [""];
 }
@@ -32,7 +32,7 @@ export default function Home() {
 	const [text, setText] = useState("");
 
 	useEffect(() => {
-		const keydownHandler = (e) => {
+		const keydownHandler = e => {
 			// console.log(e);
 			switch (e.key) {
 				case "Enter":
@@ -43,11 +43,11 @@ export default function Home() {
 					setText("");
 					break;
 				case "Backspace":
-					if (keys.length === 0) setText((text) => text?.slice(0, -1));
-					setKeys((keys) => keys?.slice(0, -1));
+					if (keys.length === 0) setText(text => text?.slice(0, -1));
+					setKeys(keys => keys?.slice(0, -1));
 					break;
 				default:
-					if (isAlphabet(e)) setKeys((keys) => (keys + e.key).toUpperCase());
+					if (isAlphabet(e)) setKeys(keys => (keys + e.key).toUpperCase());
 					break;
 			}
 		};
@@ -60,14 +60,12 @@ export default function Home() {
 	}, [keys]);
 
 	useEffect(() => {
-		const keydownHandler = (e) => {
+		const keydownHandler = e => {
 			// console.log(e)
 			if (e.key !== " " && (e.key < "0" || e.key > "9")) return;
 			e.preventDefault();
 
-			setText(
-				(text) => text + (candidate[e.key === " " ? 0 : e.key - 1] || "")
-			);
+			setText(text => text + (candidate[e.key === " " ? 0 : e.key - 1] || ""));
 			setKeys("");
 		};
 		document.addEventListener("keydown", keydownHandler);
