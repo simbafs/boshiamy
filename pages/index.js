@@ -29,8 +29,11 @@ export default function Home() {
 			// console.log(e);
 			switch (e.key) {
 				case "Enter":
+					setKeys("");
+					break;
 				case "Delete":
 					setKeys("");
+					setText("");
 					break;
 				case "Backspace":
 					setKeys((keys) => keys?.slice(0, -1));
@@ -51,9 +54,13 @@ export default function Home() {
 
 	useEffect(() => {
 		const keydownHandler = (e) => {
-			if (e.key !== " " || (e.key < "0" && e.key > "9")) return;
+			// console.log(e)
+			if(e.key !== ' ' && (e.key < '0' || e.key > '9' )) return 
 			e.preventDefault();
-			setText((text) => text + candidate[0]);
+
+			setText(
+				(text) => text + (candidate[e.key === " " ? 0 : e.key - 1] || "")
+			);
 			setKeys("");
 		};
 		document.addEventListener("keydown", keydownHandler);
