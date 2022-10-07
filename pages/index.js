@@ -4,11 +4,11 @@ import styles from "../styles/Home.module.css";
 import encodeToChar from "../data/encodeToChar.json";
 
 /**
- *  @param c {string} - char
+ *  @param e {string} - char
  *  @returns {bool}
  */
-function isAlphabet(c) {
-	return c >= 65 && c <= 90;
+function isAlphabet(e) {
+	return !e.ctrlKey && !e.altKey && e.keyCode >= 65 && e.keyCode <= 90;
 }
 
 /**
@@ -26,7 +26,7 @@ export default function Home() {
 
 	useEffect(() => {
 		const keydownHandler = (e) => {
-			// console.log(e);
+			console.log(e);
 			switch (e.key) {
 				case "Enter":
 					setKeys("");
@@ -39,7 +39,7 @@ export default function Home() {
 					setKeys((keys) => keys?.slice(0, -1));
 					break;
 				default:
-					if (isAlphabet(e.keyCode))
+					if (isAlphabet(e))
 						setKeys((keys) => (keys + e.key).toUpperCase());
 					break;
 			}
