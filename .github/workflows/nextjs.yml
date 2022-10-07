@@ -8,9 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build with the latest action rev
-        uses: tsg-iitkgp/next-build-export-action@v1.2.1
-        env:
-          BUILD_DIR: .
-          PAGES_BRANCH: gh-pages
-          TOKEN: ${{ secrets.TOKEN }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install Dependences
+        run: npm i
+      - name: Build & Export
+        run: npm run build
+      - name: Deploy 
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.DEPLOY_KEY }}
+          publish_dir: ./out
