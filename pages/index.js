@@ -1,7 +1,25 @@
 import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from 'next/router'
 import { useEffect, useState } from "react";
-import styles from "../styles/Home.module.css";
+
 import encodeToChar from "../data/encodeToChar.json";
+
+import styles from "../styles/Home.module.css";
+
+function ModeSwitch() {
+	const router = useRouter();
+	const clickHandler = e => {
+		router.push(`#${e}`)
+	}
+	return (
+		<select className={styles.card}>
+			<option onClick={() => clickHandler('typing')}>打字練習</option>
+			<option onClick={() => clickHandler('forward')}>正向查詢</option>
+			<option onClick={() => clickHandler('reverse')}>反向查詢</option>
+		</select>
+	);
+}
 
 /**
  *  @param e {string} - char
@@ -30,6 +48,7 @@ export default function Home() {
 	const [keys, setKeys] = useState("");
 	const [candidate, setCandidate] = useState([""]);
 	const [text, setText] = useState("");
+	const [mode, setMode] = useState("forward");
 
 	useEffect(() => {
 		const keydownHandler = e => {
@@ -85,6 +104,7 @@ export default function Home() {
 
 				<p className={styles.description}>互動式打字練習</p>
 
+				<ModeSwitch />
 				<h1 className={styles.title}>{keys}</h1>
 				<p className={styles.description}>{candidate}</p>
 				<h1 className={styles.title}>{text}</h1>
